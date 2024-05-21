@@ -1,0 +1,222 @@
+.courses {
+    display: flex;
+    justify-content: space-between;
+
+    @include xl {
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+
+    #form-filters {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        justify-content: end;
+        padding-bottom: 1rem;
+
+        @include xl {
+            flex-direction: row;
+            gap: 2rem;
+            align-items: center;
+        }
+    }
+
+    select, input {
+        @include xl {
+            width: 15rem;
+            height: 2.75rem;
+            margin-right: 0;
+        }
+
+        margin-right: 0.3rem;
+        border-radius: 0.375rem;
+        border: 1px solid var(--Gray-400, #d4d7e5);
+        background: var(--White, #fff);
+    }
+
+    a {
+        text-decoration: none;
+        @include standard-text;
+    }
+}
+
+.course-items {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    //margin: 37px auto 0;
+    width: calc(280px * 4);
+    gap: 2rem;
+}
+
+.top-content {
+    display: block;
+    position: relative;
+    border-radius: 0.5rem;
+    box-sizing: border-box;
+
+    .btn-circle {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        border-radius: 50%;
+        width: 2.5rem;
+        height: 2.5rem;
+        background: #FFF;
+        color: var(--Gray-700, #565973);
+        border: 1px solid var(--Gray-400, #d4d7e5);
+        transition: width 0.3s ease, height 0.3s ease;
+    }
+
+    .btn-circle:hover {
+        height: 3rem;
+        width: 3rem;
+    }
+
+    .bestseller {
+        position: absolute;
+        top: 0.5rem;
+        left: 0.5rem;
+        border-radius: 0.5rem;
+        padding: 0.25rem 0.5rem;
+        background-color: #22C55E;
+        color: #FFFFFF;
+        font-weight: bold;
+    }
+
+    .content {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        @include shadow-m;
+    }
+
+    .pricing {
+        display: flex;
+        flex-direction: row;
+        gap: 0.5rem;
+
+        .discount {
+            color: red;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .discount-enabled {
+            color: #9397AD;
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+    }
+
+    img {
+        border-top-left-radius: 0.5rem;
+        border-top-right-radius: 0.5rem;
+    }
+
+    .footer {
+        display: inline-flex;
+        align-items: flex-start;
+        gap: 1.5rem;
+        border-top: solid 1.5px #E2E5F1;
+        padding-top: 0.6rem;
+        opacity: 0.6;
+    }
+}
+
+.top-content:hover {
+    box-shadow: 0 3px 10px 2px #444;
+}
+
+@media (max-width: 1100px) {
+    .course-items {
+        grid-template-columns: 1fr 1fr;
+        width: calc(280px * 2);
+    }
+
+    .top-content {
+        margin: 0 auto 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .course-items {
+        display: block;
+        width: 100vw;
+    }
+
+    .top-content {
+        margin: 0 auto 2rem;
+    }
+}
+
+.top-banner {
+    margin-top: 10rem;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    border-radius: 0.5rem;
+    background: var(--Gray-100, #f3f6ff);
+
+    .sub-header {
+        align-self: stretch;
+        color: var(--Gray-700, #565973);
+        font-feature-settings: "clig" off, "liga" off;
+
+        @include xl {
+            /* Body/Lead */
+            font-family: Manrope;
+            font-size: 1.5rem;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 160%; /* 2.4rem */
+        }
+    }
+
+    h1 {
+        align-self: stretch;
+        color: var(--Gray-900, #0b0f19);
+        font-feature-settings: "clig" off, "liga" off;
+
+        @include h6;
+
+        @include xl {
+            /* Heading / H1 */
+            font-family: Manrope;
+            font-size: 2.5rem;
+            font-style: normal;
+            font-weight: 800;
+            line-height: 130%; /* 3.25rem */
+        }
+
+        .skills {
+            color: var(--Brand-Primary, #6366f1);
+            font-feature-settings: "clig" off, "liga" off;
+
+            @include xl {
+                /* Heading / H1 */
+                font-family: Manrope;
+                font-size: 2.5rem;
+                font-style: normal;
+                font-weight: 800;
+                line-height: 130%;
+            }
+        }
+    }
+
+    button {
+        margin-top: 2.5rem;
+    }
+
+    img {
+        display: none;
+
+        @include xl {
+            display: block;
+        }
+    }
+}

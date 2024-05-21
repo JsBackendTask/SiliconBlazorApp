@@ -1,0 +1,27 @@
+#signup {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    margin: 2rem auto;
+    @include shadow-s;
+
+    @include xl {
+        flex-shrink: 0;
+    }
+}
+
+.signup-form {
+    display: flex;
+    flex-direction: column;
+
+    .names-container {
+
+        @include xl {
+            display: grid;
+            grid-template-columns: repeat(2, auto);
+            gap: 1rem;
+        }
+    }
+}

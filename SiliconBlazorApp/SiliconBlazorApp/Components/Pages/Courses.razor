@@ -1,0 +1,62 @@
+﻿@page "/courses"
+
+<section class="courses">
+    <div class="container">
+        <h1>Courses</h1>
+        <form id="form-filters">
+            <select>
+                <option>All categories</option>
+            </select>
+            <div>
+                <input id="form-search" name="form-search" placeholder="Search" />
+            </div>
+        </form>
+        <div class="container-grid">
+            <div class="course-items">
+                        <a asp-action="Details" asp-controller="Courses" asp-route-itemid="" class="top-content">
+
+                                <div class="bestseller">Best Seller</div>
+
+                            <button class="btn-circle bookmark"><i class="fa-regular fa-bookmark"></i></button>
+                            <img src="~/Images/Courses/" alt="" />
+                            <div class="content">
+                                <h5 class="title">e</h5>
+                                <p class="author">Author </p>
+                                <div class="pricing">
+
+                                        <div class="discount">  </div>
+                                    }
+                                    <div class="price" ></div>
+                                </div>
+                                <div class="footer">
+                                    <div class="hours">
+                                        <i class="fa-regular fa-clock"></i>  hours
+                                    </div>
+                                    <div class="likes">
+                                        <i class="fa-regular fa-thumbs-up"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="top-banner">
+    <div class="text-block">
+        <p class="sub-header">Ready to get started?</p>
+        <h1>Take Your <span class="skills">Skills</span> to the Next Level</h1>
+        <button class="btn-theme">Work with us</button>
+    </div>
+    <img src="Images\Icons\illustration-courses.svg" alt="" class="illustration-courses">
+
+
+</div>
+
+
+@code {
+
+}

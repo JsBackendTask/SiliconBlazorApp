@@ -1,0 +1,41 @@
+﻿@rendermode InteractiveAuto
+
+<header> 
+    <div class="container-fluid">
+        <NavLink id="logo" href="/"><img src="/images/Silicon Logotype - Light Mode.svg" alt="" /></NavLink>
+        <button class="mobile-nav-toggle" aria-controls="primary-nav" aria-expanded="false"><span class="sr-only">Menu</span></button>
+
+        <nav class="nav-menu">
+            <NavLink href="/" class="nav-link">Overiew</NavLink>
+            <NavLink href="#features" class="nav-link">Features</NavLink>
+            <NavLink href="/contact" class="nav-link">Contact</NavLink>
+            <AuthorizeView >
+                <Authorized>
+                    <NavLink href="/courses" class="nav-link">Courses</NavLink>
+                </Authorized>                
+            </AuthorizeView>           
+        </nav>
+
+        <NavLink class="nav-item">
+
+        </NavLink>
+
+        <div class="account-flex hidewhenbig">
+            <div class="account-buttons">
+                <a href="/account/login" class="btn-gray"><i class="fa-solid fa-right-to-bracket"></i>Sign In</a>
+                <a href="/account/register" class="btn-theme"><i class="fa-regular fa-user"></i>Sign Up</a>
+            </div>
+
+            <AuthorizeView>
+                <Authorized>
+                    <a href="/account/manage" class="btn-gray"><i class="fa-regular fa-user"></i>Profile</a>
+                    <a href="/account/logout" class="btn-theme"><i class="fa-regular fa-sign-out"></i>Logout</a>
+                </Authorized>
+            </AuthorizeView>
+        </div>
+    </div>
+</header>
+
+@code {
+
+}

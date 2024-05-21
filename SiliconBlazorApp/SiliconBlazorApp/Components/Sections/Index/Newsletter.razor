@@ -1,0 +1,52 @@
+﻿<section id="newsletter" class="top-newsletter">
+    <div class="newsletter-header">
+        <h1>Don't Want to Miss Anything?</h1>
+        <p>Sign up for one of our newsletters!</p>
+        <img src="Images/Icons/arrows.svg" alt="">
+    </div>
+
+    <EditForm method="post" Model="model" OnValidSubmit="OnValidSubmit" FormName="IndexNewsletter">
+        <DataAnnotationsValidator />
+        <div class="newsletters-email">
+            <label ></label>
+            <InputText type="email" @bind-Value="model.Email"  />
+            <button type="submit" class="btn-theme" formmethod="post">Subscribe*</button>
+            <span class="success-styling">@StatusMessage</span>
+            <p>* Yes, I agree to the <a href="">Terms</a> and <a href="">privacy</a></p>
+        </div>
+        <ValidationMessage For="@(() => model.Email)" class="error-styling" />
+    </EditForm>
+</section>
+
+@code {
+    [SupplyParameterFromQuery]
+    public string StatusMessage { get; set; } = null!;
+
+    [SupplyParameterFromForm]
+    private NewsletterModel model { get; set;} = new NewsletterModel();
+
+    public async Task OnValidSubmit() //This does not exist yet. Might not exist ever.
+    {
+        try
+        {
+            var result = await Http.PostAsJsonAsync("https://newsletterprovider-silicon-bnar.azurewebsites.net/api/Subscribe?code=A40Vk1ZN2DdskiNaUvlUecTIophMwQd_Tv5yGj6bc91tAzFuhJEPxw%3D%3D", model);
+            if (result.IsSuccessStatusCode)
+                StatusMessage = "You have been subscribed!";
+        }
+        catch
+        {
+            StatusMessage = "An error occured, please try again later.";
+        }
+
+        model = new NewsletterModel();
+    }
+
+    public class NewsletterModel
+    {
+        [Required(ErrorMessage = "You must provide a emailadress")]
+        [DataType(DataType.EmailAddress)]
+        [Display(Name = "Email adress", Prompt = "Enter your email adress", Order = 2)]
+        [RegularExpression("^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$", ErrorMessage = "Invalid email address. regex check")]
+        public string Email { get; set; } = null!;
+    }
+}
