@@ -1,0 +1,15 @@
+﻿@page "/Account/Logout"
+
+<PageTitle>Logout</PageTitle>
+
+<h1>You have been logged out!</h1>
+
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await SignInManager.SignOutAsync();
+        NavigationManager.NavigateTo("/");
+    }
+}
+

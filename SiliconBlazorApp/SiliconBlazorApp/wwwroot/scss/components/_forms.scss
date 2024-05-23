@@ -28,6 +28,7 @@ label {
     font-weight: 600;
 }
 
-a {
-    color: var(--color-theme);
+.form-link-color {
+    color: $theme;
+    cursor: pointer;
 }

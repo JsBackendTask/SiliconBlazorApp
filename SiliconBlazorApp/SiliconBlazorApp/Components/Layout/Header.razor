@@ -1,6 +1,4 @@
-﻿@rendermode InteractiveAuto
-
-<header> 
+﻿<header> 
     <div class="container-fluid">
         <NavLink id="logo" href="/"><img src="/images/Silicon Logotype - Light Mode.svg" alt="" /></NavLink>
         <button class="mobile-nav-toggle" aria-controls="primary-nav" aria-expanded="false"><span class="sr-only">Menu</span></button>
@@ -20,16 +18,24 @@
 
         </NavLink>
 
-        <div class="account-flex hidewhenbig">
-            <div class="account-buttons">
-                <a href="/account/login" class="btn-gray"><i class="fa-solid fa-right-to-bracket"></i>Sign In</a>
-                <a href="/account/register" class="btn-theme"><i class="fa-regular fa-user"></i>Sign Up</a>
-            </div>
 
+
+
+
+
+
+         <div class="account-flex hidewhenbig">
             <AuthorizeView>
+                <NotAuthorized>
+                    <div class="account-buttons">
+                        <NavLink href="/account/login" class="btn-gray"><i class="fa-solid fa-right-to-bracket"></i>Sign In</NavLink>
+                        <NavLink href="/account/register" class="btn-theme"><i class="fa-regular fa-user"></i>Sign Up</NavLink>
+                    </div>
+                </NotAuthorized>
+
                 <Authorized>
-                    <a href="/account/manage" class="btn-gray"><i class="fa-regular fa-user"></i>Profile</a>
-                    <a href="/account/logout" class="btn-theme"><i class="fa-regular fa-sign-out"></i>Logout</a>
+                    <NavLink href="/account/manage" class="btn-gray"><i class="fa-regular fa-user"></i>Profile</NavLink>
+                    <NavLink href="/account/logout" class="btn-theme"><i class="fa-regular fa-sign-out"></i>Logout</NavLink>
                 </Authorized>
             </AuthorizeView>
         </div>

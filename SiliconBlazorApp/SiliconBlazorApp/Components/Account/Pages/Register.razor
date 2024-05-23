@@ -4,8 +4,9 @@
 <h1>Register</h1>
 
 <div id="signup" class="top-title">
-    <StatusMessage Message="@Message" />
+ 
     <EditForm Model="Model" asp-route-returnUrl="@ReturnUrl" OnValidSubmit="Submit" FormName="SignUpForm" class="signup-form">
+        <StatusMessage Message="@Message" />
         <DataAnnotationsValidator />
         <h1>Create account</h1>
         <p class="signin-text">Already have an account? <NavLink href="/signin">Sign in here.</NavLink></p>
@@ -49,6 +50,7 @@
         <span class="error error-styling"><ValidationMessage For="@(() => Model.TermsAndConditions)" /></span>
         <button type="submit" class="btn-theme-s" formmethod="post">Register now!</button>
     </EditForm>
+
 </div>
 
 @code {
@@ -65,47 +67,40 @@
 
     private string? Message => identityErrors is null ? null : $"Error: {string.Join(", ", identityErrors.Select(error => error.Description))}";
 
-    public async Task Submit()
+    public async Task Submit() /* I can't use try catch here or the redirect breaks. It throws an exception at the navigation stage. */
     {
-        try
+        var existingUser = await UserManager.FindByEmailAsync(Model.Email);
+        if (existingUser != null)
         {
-            var existingUser = await UserManager.FindByEmailAsync(Model.Email);
-            if (existingUser != null)
+            identityErrors = new List<IdentityError> { new IdentityError { Description = "A user with this email already exists." } };
+            return;
+        }
+
+        var user = new ApplicationUser
             {
-                identityErrors = new List<IdentityError> { new IdentityError { Description = "A user with this email already exists." } };
-                return;
-            }
+                FirstName = Model.FirstName,
+                LastName = Model.LastName,
+                UserName = Model.Email,
+                Email = Model.Email
+            };
 
-            var user = new ApplicationUser
-                {
-                    FirstName = Model.FirstName,
-                    LastName = Model.LastName,
-                    UserName = Model.Email,
-                    Email = Model.Email
-                };
+        var result = await UserManager.CreateAsync(user, Model.Password);
+        if (!result.Succeeded)
+        {
+            identityErrors = result.Errors;
+            return;
+        }
 
-            var result = await UserManager.CreateAsync(user, Model.Password);
-            if (!result.Succeeded)
-            {
-                identityErrors = result.Errors;
-                return;
-            }
-
-            var response = await Http.PostAsJsonAsync("https://verificationprovider-silicon-bnar.azurewebsites.net/api/Verify?code=GYUemekurKbemZgcZjQjK_WZHFRHCBUF6FHqAeYVq5BBAzFuDzsozw%3D%3D", Model);
-            if (UserManager.Options.SignIn.RequireConfirmedAccount)
-            {
-               RedirectManager.RedirectTo(
-                    "Account/RegisterConfirmation",
-                    new() { ["email"] = user.Email, ["returnUrl"] = ReturnUrl });
-            }
-
+        var response = await Http.PostAsJsonAsync("https://verificationprovider-silicon-bnar.azurewebsites.net/api/Verify?code=GYUemekurKbemZgcZjQjK_WZHFRHCBUF6FHqAeYVq5BBAzFuDzsozw%3D%3D", Model);
+        if (UserManager.Options.SignIn.RequireConfirmedAccount)
+        {
+            NavigationManager.NavigateTo($"/Account/RegisterConfirmation?email={Model.Email}");
+        } else
+        {
             await SignInManager.SignInAsync(user, isPersistent: false);
-            RedirectManager.RedirectTo(ReturnUrl);
+            NavigationManager.NavigateTo(ReturnUrl ?? "");
         }
-        catch
-        {
-            identityErrors = new List<IdentityError> { new IdentityError { Description = "An error occurred while creating the user." } };
-        }
+
     }
 
     public class SignUpModel
