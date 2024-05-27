@@ -73,17 +73,6 @@
         width: 3rem;
     }
 
-    .bestseller {
-        position: absolute;
-        top: 0.5rem;
-        left: 0.5rem;
-        border-radius: 0.5rem;
-        padding: 0.25rem 0.5rem;
-        background-color: #22C55E;
-        color: #FFFFFF;
-        font-weight: bold;
-    }
-
     .content {
         display: flex;
         flex-direction: column;
@@ -91,24 +80,6 @@
         padding: 1rem;
         border-radius: 0.5rem;
         @include shadow-m;
-    }
-
-    .pricing {
-        display: flex;
-        flex-direction: row;
-        gap: 0.5rem;
-
-        .discount {
-            color: red;
-            font-weight: 700;
-            text-decoration: none;
-        }
-
-        .discount-enabled {
-            color: #9397AD;
-            text-decoration: line-through;
-            opacity: 0.6;
-        }
     }
 
     img {
@@ -124,7 +95,38 @@
         padding-top: 0.6rem;
         opacity: 0.6;
     }
+
+    .bestseller {
+        position: absolute;
+        top: 0.5rem;
+        left: 0.5rem;
+        border-radius: 0.5rem;
+        padding: 0.25rem 0.5rem;
+        background-color: #22C55E;
+        color: #FFFFFF;
+        font-weight: bold;
+    }
 }
+
+.pricing {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+}
+
+.discount {
+    color: red;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.discount-enabled {
+    color: #9397AD;
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+
 
 .top-content:hover {
     box-shadow: 0 3px 10px 2px #444;

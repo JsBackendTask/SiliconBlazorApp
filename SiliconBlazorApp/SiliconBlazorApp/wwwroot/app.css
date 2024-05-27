@@ -493,6 +493,16 @@ a:hover {
   color: var(--System-Error, #EF4444);
 }
 
+.success-styling {
+  display: flex;
+  padding: 0rem 0.5rem;
+  align-items: flex-start;
+  gap: 0.25rem;
+  border-radius: 0.25rem;
+  background: rgba(239, 68, 68, 0.12);
+  color: var(--System-Error, #22C55E);
+}
+
 form {
   gap: 1rem;
 }
@@ -529,8 +539,9 @@ label {
   font-weight: 600;
 }
 
-a {
-  color: var(--color-theme);
+.form-link-color {
+  color: #6467f2;
+  cursor: pointer;
 }
 
 header {
@@ -1304,16 +1315,6 @@ footer .container .social-media {
   height: 3rem;
   width: 3rem;
 }
-.top-content .bestseller {
-  position: absolute;
-  top: 0.5rem;
-  left: 0.5rem;
-  border-radius: 0.5rem;
-  padding: 0.25rem 0.5rem;
-  background-color: #22C55E;
-  color: #FFFFFF;
-  font-weight: bold;
-}
 .top-content .content {
   display: flex;
   flex-direction: column;
@@ -1321,21 +1322,6 @@ footer .container .social-media {
   padding: 1rem;
   border-radius: 0.5rem;
   box-shadow: 0px 4px 9px -1px rgba(19, 16, 34, 0.03), 0px 4.4px 20px -1px rgba(19, 16, 34, 0.05);
-}
-.top-content .pricing {
-  display: flex;
-  flex-direction: row;
-  gap: 0.5rem;
-}
-.top-content .pricing .discount {
-  color: red;
-  font-weight: 700;
-  text-decoration: none;
-}
-.top-content .pricing .discount-enabled {
-  color: #9397AD;
-  text-decoration: line-through;
-  opacity: 0.6;
 }
 .top-content img {
   border-top-left-radius: 0.5rem;
@@ -1347,6 +1333,34 @@ footer .container .social-media {
   gap: 1.5rem;
   border-top: solid 1.5px #E2E5F1;
   padding-top: 0.6rem;
+  opacity: 0.6;
+}
+.top-content .bestseller {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  border-radius: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  background-color: #22C55E;
+  color: #FFFFFF;
+  font-weight: bold;
+}
+
+.pricing {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.discount {
+  color: red;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.discount-enabled {
+  color: #9397AD;
+  text-decoration: line-through;
   opacity: 0.6;
 }
 
@@ -1445,6 +1459,102 @@ footer .container .social-media {
   }
 }
 
+.program-infocard {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  padding: 16px;
+  background-color: white;
+  border-radius: 5px;
+  display: inline-block;
+  order: 1;
+  align-self: start;
+}
+.program-infocard .infocard-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.program-infocard .discount {
+  font-size: 25px;
+}
+
+.details-header {
+  width: 95rem;
+  height: 42.3125rem;
+  flex-shrink: 0;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  color: white;
+}
+.details-header h1, .details-header p, .details-header div {
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+.details-header h1 {
+  top: 50%;
+  transform: translateY(-50%);
+  transform: translateX(4%);
+  color: white;
+}
+.details-header p {
+  top: 60%;
+  transform: translateY(-50%);
+  transform: translateX(4%);
+}
+.details-header div {
+  bottom: 0;
+}
+.details-header .bestseller {
+  position: absolute;
+  top: calc(50% - 60px);
+  left: 4%;
+  transform: translateY(-50%);
+  transform: translateX(4%);
+}
+.details-header .reviews {
+  position: absolute;
+  top: calc(50% + 100px);
+  left: 4%;
+  transform: translateY(-50%);
+  transform: translateX(4%);
+}
+.details-header .reviews .review-item {
+  margin: 0 10px;
+  padding-right: 20px;
+  border-right: 1px solid rgba(255, 255, 255, 0.46);
+}
+.details-header .reviews .review-item:last-child {
+  border-right: none;
+}
+.details-header .reviews .review-item .stars {
+  color: yellow;
+}
+
+.details-body ul {
+  list-style: none;
+}
+.details-body ul li:before {
+  content: url("../../Images/bx-check-circle.svg");
+  display: inline-block;
+  width: 1em;
+  margin-right: 0.5em;
+}
+
+.details-content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.left-content {
+  width: calc(100% - 300px);
+}
+
 #signin {
   display: flex;
   align-content: center;
@@ -1484,6 +1594,12 @@ form {
   #signup {
     flex-shrink: 0;
   }
+}
+
+.top-confirmation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .signup-form {
