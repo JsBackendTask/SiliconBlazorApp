@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <Content Remove="compilerconfig.json" />
+    <Content Remove="Components\Pages\accountNotifications.razor" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +28,15 @@
 
   <ItemGroup>
     <None Include="compilerconfig.json" />
+    <None Include="Components\Account\Pages\Manage\AccountNotifications.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Components\Pages\accountNotifications.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Components\Pages\accountNotifications.razor" />
   </ItemGroup>
 
 </Project>

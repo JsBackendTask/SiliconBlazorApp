@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiliconBlazorApp", "Silicon
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiliconBlazorApp.Client", "SiliconBlazorApp\SiliconBlazorApp.Client\SiliconBlazorApp.Client.csproj", "{BF26C7A0-3518-4DE8-9C97-139402C8EA70}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infastructure", "Infastructure\Infastructure.csproj", "{5A8A5008-70A4-4ED1-80B7-793F98495905}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infastructure", "Infastructure\Infastructure.csproj", "{5A8A5008-70A4-4ED1-80B7-793F98495905}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

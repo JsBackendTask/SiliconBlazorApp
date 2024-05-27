@@ -2,76 +2,247 @@
 
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
 @using SiliconBlazorApp.Data
 
 @inject UserManager<ApplicationUser> UserManager
 @inject SignInManager<ApplicationUser> SignInManager
 @inject IdentityUserAccessor UserAccessor
 @inject IdentityRedirectManager RedirectManager
+@inject SiliconBlazorApp.Data.ApplicationDbContext DbContext
 
 <PageTitle>Profile</PageTitle>
 
 <h3>Profile</h3>
 <StatusMessage />
 
-<div class="row">
-    <div class="col-md-6">
-        <EditForm Model="Input" FormName="profile" OnValidSubmit="OnValidSubmitAsync" method="post">
-            <DataAnnotationsValidator />
-            <ValidationSummary class="text-danger" role="alert" />
-            <div class="form-floating mb-3">
-                <input type="text" value="@username" class="form-control" placeholder="Please choose your username." disabled />
-                <label for="username" class="form-label">Username</label>
-            </div>
-            <div class="form-floating mb-3">
-                <InputText @bind-Value="Input.PhoneNumber" class="form-control" placeholder="Please enter your phone number." />
-                <label for="phone-number" class="form-label">Phone number</label>
-                <ValidationMessage For="() => Input.PhoneNumber" class="text-danger" />
-            </div>
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
-        </EditForm>
+<div class="top-details">
+    <div class="top-form">
+        @if (BasicProfile == null || AddressInfo == null)
+        {
+            <p>Loading...</p>
+        }
+        else
+        {
+            <EditForm Model="BasicProfile" FormName="profile" OnValidSubmit="OnValidSubmitAsync">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="form-header">
+                    <h1>Account details</h1>
+                    <p class="basicinfo">Basic info</p>
+                </div>
+
+                <div class="names-float">
+                    <div class="firstname-float">
+                        <label for="firstname" class="labels">Firstname</label>
+                        <InputText @bind-Value="BasicProfile.FirstName" id="firstname" />
+                        <ValidationMessage For="@(() => BasicProfile.FirstName)" />
+                    </div>
+
+                    <div class="lastname-float">
+                        <label for="lastname" class="labels">Lastname</label>
+                        <InputText @bind-Value="BasicProfile.LastName" id="lastname" />
+                        <ValidationMessage For="@(() => BasicProfile.LastName)" />
+                    </div>
+                </div>
+
+                <div class="email-phone-float">
+                    <div class="email-float">
+                        <label for="email" class="labels">Email</label>
+                        <InputText @bind-Value="BasicProfile.Email" id="email" />
+                        <ValidationMessage For="@(() => BasicProfile.Email)" />
+                    </div>
+
+                    <div class="phone-float">
+                        <label for="phone" class="labels">Phone</label>
+                        <InputText @bind-Value="BasicProfile.PhoneNumber" id="phone" />
+                        <ValidationMessage For="@(() => BasicProfile.PhoneNumber)" />
+                    </div>
+                </div>
+
+                <div class="bio-float">
+                    <label for="bio" class="labels">Bio</label>
+                    <InputTextArea @bind-Value="BasicProfile.Bio" id="bio" style="width: 500px; height: 200px;" />
+                    <ValidationMessage For="@(() => BasicProfile.Bio)" />
+                </div>
+
+                <div>
+                    <label for="profileImage" class="labels">Profile Image</label>
+                    <InputFile id="profileImage" />
+                </div>
+
+                <div class="buttons-float">
+                    <button class="btn-theme" type="submit">Save Changes</button>
+                </div>
+            </EditForm>
+
+            <EditForm Model="AddressInfo" OnValidSubmit="OnValidAddressSubmitAsync" FormName="AddressForm">
+                <DataAnnotationsValidator />
+
+                <p class="basicinfo">Address</p>
+                <ValidationSummary />
+
+                <div class="address-float">
+                    <div class="address-1">
+                        <label for="address1" class="labels">Address Line 1</label>
+                        <InputText @bind-Value="AddressInfo.AddressLine_1" id="address1" class="address-input" />
+                        <ValidationMessage For="@(() => AddressInfo.AddressLine_1)" />
+                    </div>
+                    <div class="address-2">
+                        <label for="address2" class="labels">Address Line 2</label>
+                        <InputText @bind-Value="AddressInfo.AddressLine_2" id="address2" class="address-input" />
+                        <ValidationMessage For="@(() => AddressInfo.AddressLine_2)" />
+                    </div>
+                </div>
+
+                <div class="post-city-float">
+                    <div class="postcode-div">
+                        <label for="postcode" class="labels">Postal Code</label>
+                        <InputText @bind-Value="AddressInfo.PostalCode" id="postcode" />
+                        <ValidationMessage For="@(() => AddressInfo.PostalCode)" />
+                    </div>
+                    <div class="city-div">
+                        <label for="city" class="labels">City</label>
+                        <InputText @bind-Value="AddressInfo.City" id="city" />
+                        <ValidationMessage For="@(() => AddressInfo.City)" />
+                    </div>
+                </div>
+
+                <div class="buttons-float">
+                    <button type="submit" class="btn-theme">Save Changes</button>
+                </div>
+            </EditForm>
+        }      
     </div>
 </div>
 
 @code {
     private ApplicationUser user = default!;
-    private string? username;
-    private string? phoneNumber;
+
+    public string? Message { get; set; }
+
+
+    [SupplyParameterFromForm]
+    private InputModel BasicProfile { get; set; } = new();
 
     [CascadingParameter]
     private HttpContext HttpContext { get; set; } = default!;
 
     [SupplyParameterFromForm]
-    private InputModel Input { get; set; } = new();
+    private AddressInfoModel AddressInfo { get; set; } = new();
+
+    private async Task<AddressEntity> GetAddressById(string id)
+    {
+        return await DbContext.Addresses.FindAsync(id);
+    }
 
     protected override async Task OnInitializedAsync()
     {
         user = await UserAccessor.GetRequiredUserAsync(HttpContext);
-        username = await UserManager.GetUserNameAsync(user);
-        phoneNumber = await UserManager.GetPhoneNumberAsync(user);
 
-        Input.PhoneNumber ??= phoneNumber;
+        BasicProfile = new InputModel
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Bio = user.Bio
+            };
+
+        if (user.AddressId != null)
+        {
+            var address = await GetAddressById(user.AddressId);
+
+            AddressInfo = new AddressInfoModel()
+                {
+
+                    AddressLine_1 = address.AddressLine_1,
+                    AddressLine_2 = address.AddressLine_2,
+                    PostalCode = address.PostalCode,
+                    City = address.City
+                };
+
+        }
     }
 
     private async Task OnValidSubmitAsync()
     {
-        if (Input.PhoneNumber != phoneNumber)
+        user.FirstName = BasicProfile.FirstName;
+        user.LastName = BasicProfile.LastName;
+        user.Email = BasicProfile.Email;
+        user.Bio = BasicProfile.Bio;
+
+        if (BasicProfile.ProfileImage != null)
         {
-            var setPhoneResult = await UserManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
-            if (!setPhoneResult.Succeeded)
-            {
-                RedirectManager.RedirectToCurrentPageWithStatus("Error: Failed to set phone number.", HttpContext);
-            }
+            byte[] fileBytes;
+            using var memoryStream = new MemoryStream();
+            await BasicProfile.ProfileImage.CopyToAsync(memoryStream);
+            fileBytes = memoryStream.ToArray();
+
+            user!.ProfileImage = fileBytes;
         }
 
-        await SignInManager.RefreshSignInAsync(user);
-        RedirectManager.RedirectToCurrentPageWithStatus("Your profile has been updated", HttpContext);
+        var setPhoneResult = await UserManager.SetPhoneNumberAsync(user, BasicProfile.PhoneNumber);
+
+        await UserManager.UpdateAsync(user);
+        Message = "Your user information has been updated.";
     }
 
-    private sealed class InputModel
+    private async Task OnValidAddressSubmitAsync()
     {
-        [Phone]
+        if (user.Address == null)
+        {
+            user.Address = new AddressEntity();
+        }
+        user.AddressId = user.Address.Id;
+        user.Address.AddressLine_1 = AddressInfo.AddressLine_1;
+        user.Address.AddressLine_2 = AddressInfo.AddressLine_2;
+        user.Address.PostalCode = AddressInfo.PostalCode;
+        user.Address.City = AddressInfo.City;
+
+        await UserManager.UpdateAsync(user);
+    }
+
+    public class InputModel
+    {
+        [Required]
+        [Display(Name = "First Name")]
+        public string? FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "Last Name")]
+        public string? LastName { get; set; }
+
+        [Required]
+        [EmailAddress]
+        public string? Email { get; set; }
+
         [Display(Name = "Phone number")]
         public string? PhoneNumber { get; set; }
+
+        [Display(Name = "Bio")]
+        public string? Bio { get; set; }
+
+        [Display(Name = "Profile Image")]
+        public IFormFile? ProfileImage { get; set; }
+    }
+
+    public class AddressInfoModel
+    {
+        [Required]
+        [Display(Name = "Address Line 1")]
+        public string AddressLine_1 { get; set; } = null!;
+
+        [Display(Name = "Address Line 2")]
+        public string? AddressLine_2 { get; set; } 
+
+        [Required]
+        [Display(Name = "Postal Code")]
+        public string PostalCode { get; set; } = null!;
+
+        [Required]
+        [Display(Name = "City")]
+        public string City { get; set; } = null!;
     }
 }

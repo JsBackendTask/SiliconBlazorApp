@@ -1,0 +1,122 @@
+﻿@page "/Account/Manage/Notifications"
+
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Identity
+@using SiliconBlazorApp.Data
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject ILogger<Login> Logger
+@inject NavigationManager NavigationManager
+@inject IdentityRedirectManager RedirectManager
+@inject IJSRuntime JSRuntime
+
+<PageTitle>Notifications</PageTitle>
+
+<h1>Notifications</h1>
+
+@if (!string.IsNullOrEmpty(StatusMessage))
+{
+    <div class="success success-styling">
+        @StatusMessage
+    </div>
+}
+
+<EditForm Model="BasicProfile" FormName="OptionsForm" OnValidSubmit="SubscribeAsync">
+    <div class="email-float">
+        <label for="email" class="labels">Email</label>
+        <InputText @bind-Value="BasicProfile.Email" id="email" />
+        <ValidationMessage For="@(() => BasicProfile.Email)" />
+    </div>
+
+    <div class="hide">
+        <button type="submit" class="btn-theme ">Save</button>
+        <button type="reset" class="btn-gray">Cancel</button>
+    </div>
+</EditForm>
+
+
+<div>
+    <p>Do you wish to subscribe to our newsletter?</p>
+    <div class="row">
+        <EditForm Model="BasicProfile" FormName="Subscirbeform" OnValidSubmit="SubscribeAsync">
+            <StatusMessage />
+            <div class="email-float hide">
+                <label for="email" class="labels">Email</label>
+                <InputText @bind-Value="BasicProfile.Email" id="email" />
+                <ValidationMessage For="@(() => BasicProfile.Email)" />
+            </div>
+
+            <div class="col-2"> <button type="submit" class="btn-theme">Subscribe</button></div>
+        </EditForm>
+        <EditForm Model="BasicProfile" FormName="Unsubscirbeform" OnValidSubmit="UnsubscribeAsync">
+            <StatusMessage />
+            <div class="email-float hide">
+                <label for="email" class="labels">Email</label>
+                <InputText @bind-Value="BasicProfile.Email" id="email" />
+                <ValidationMessage For="@(() => BasicProfile.Email)" />
+            </div>
+
+            <div class="col-2"><button type="submit" class="btn-gray">Unsubscribe</button></div>
+        </EditForm>
+    </div>
+</div>
+
+
+@code {
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    private string? StatusMessage { get; set; }
+
+    private ApplicationUser user = default!;
+
+    [SupplyParameterFromForm]
+    public BasicProfileModel BasicProfile { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        user = await SignInManager.UserManager.GetUserAsync(HttpContext.User);
+
+        BasicProfile = new BasicProfileModel()
+            {
+                Email = user.Email!
+            };
+    }
+
+    public async Task SubscribeAsync()
+    {
+        Console.WriteLine("Subscribe button clicked");
+
+        var result = await Http.PostAsJsonAsync("https://newsletterprovider-silicon-bnar.azurewebsites.net/api/Subscribe?code=A40Vk1ZN2DdskiNaUvlUecTIophMwQd_Tv5yGj6bc91tAzFuhJEPxw%3D%3D", new {Email = BasicProfile.Email});
+        if (result.IsSuccessStatusCode)
+            StatusMessage = "You have been subscribed!";
+        else
+            StatusMessage = "Something went wrong!";
+
+        StateHasChanged();
+    }
+
+    public async Task UnsubscribeAsync()
+    {
+        Console.WriteLine("Unsubscribe button clicked");
+
+        var result = await Http.PostAsJsonAsync("https://newsletterprovider-silicon-bnar.azurewebsites.net/api/Unsubscribe?code=jt8X-9EKOYLDibQ5IjRcR1YiNubyPIWf_-1nP3xIjy8rAzFuWSMrDw%3D%3D", new { Email = BasicProfile.Email });
+        if (result.IsSuccessStatusCode)
+            StatusMessage = "You have been unsubscribed!";
+        else
+            StatusMessage = "Something went wrong!";
+
+        StateHasChanged();
+    }
+
+    public class BasicProfileModel
+    {
+        [Required]
+        [EmailAddress]
+        [RegularExpression("^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$", ErrorMessage = "Invalid email address. regex check")]
+        public string Email { get; set; } = null!;
+    }
+
+}
