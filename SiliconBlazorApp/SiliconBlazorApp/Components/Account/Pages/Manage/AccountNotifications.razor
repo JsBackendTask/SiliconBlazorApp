@@ -38,16 +38,14 @@
 
 <div>
     <p>Do you wish to subscribe to our newsletter?</p>
-    <div class="row">
-        <EditForm Model="BasicProfile" FormName="Subscirbeform" OnValidSubmit="SubscribeAsync">
+        <EditForm Model="BasicProfile" FormName="Subscirbeform" OnValidSubmit="SubscribeAsync" class="bm-1">
             <StatusMessage />
             <div class="email-float hide">
                 <label for="email" class="labels">Email</label>
                 <InputText @bind-Value="BasicProfile.Email" id="email" />
                 <ValidationMessage For="@(() => BasicProfile.Email)" />
             </div>
-
-            <div class="col-2"> <button type="submit" class="btn-theme">Subscribe</button></div>
+            <button type="submit" class="btn-theme mb-1">Subscribe</button>
         </EditForm>
         <EditForm Model="BasicProfile" FormName="Unsubscirbeform" OnValidSubmit="UnsubscribeAsync">
             <StatusMessage />
@@ -57,9 +55,8 @@
                 <ValidationMessage For="@(() => BasicProfile.Email)" />
             </div>
 
-            <div class="col-2"><button type="submit" class="btn-gray">Unsubscribe</button></div>
+            <button type="submit" class="btn-gray mt-1">Unsubscribe</button>
         </EditForm>
-    </div>
 </div>
 
 
