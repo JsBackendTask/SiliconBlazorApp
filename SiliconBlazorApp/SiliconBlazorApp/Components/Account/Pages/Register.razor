@@ -91,6 +91,13 @@
             return;
         }
 
+        var roleResult = await UserManager.AddToRoleAsync(user, "User");
+        if (!roleResult.Succeeded)
+        {
+            identityErrors = roleResult.Errors;
+            return;
+        }
+
         var response = await Http.PostAsJsonAsync("https://verificationprovider-silicon-bnar.azurewebsites.net/api/Verify?code=GYUemekurKbemZgcZjQjK_WZHFRHCBUF6FHqAeYVq5BBAzFuDzsozw%3D%3D", Model);
         if (UserManager.Options.SignIn.RequireConfirmedAccount)
         {
